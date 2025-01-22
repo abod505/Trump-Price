@@ -1,1 +1,1 @@
-web: python TrumpPrice.py
+web: python Trump.py
