@@ -1,31 +1,38 @@
-import time
 import requests
 import telebot
+import time
 
-# إعدادات البوت
-TOKEN = "7674590436:AAFjTPd2v3zSn8lz267x_JTM7hu2ZXTuY-g"  # توكن البوت
-CHANNEL_ID = "@Trump_Price_1"  # معرف القناة
-SYMBOL = "TRUMPUSDT"  # رمز العملة على Binance
+# Token of your bot
+TOKEN = '7674590436:AAFjTPd2v3zSn8lz267x_JTM7hu2ZXTuY-g'
+# Channel username (should be in the format @channelusername)
+CHANNEL_ID = '@eee0ee0waooqwk'
 
 bot = telebot.TeleBot(TOKEN)
 
-# دالة لجلب سعر العملة
-def fetch_trump_price():
-    url = f"https://api.binance.com/api/v3/ticker/price?symbol={SYMBOL}"
+def get_price():
     try:
+        url = 'https://api.binance.com/api/v3/ticker/price?symbol=TRUMPUSDT'
         response = requests.get(url)
         data = response.json()
-        price = float(data['price'])
-        return f"{price:.2f}$"
+        price = data.get('price')
+        
+        if price:
+            return price
+        else:
+            print("Error: No price found in the response")
+            return None
     except Exception as e:
-        return f"خطأ: {e}"
+        print(f"Error getting price: {e}")
+        return None
 
-# دالة لإرسال السعر إلى القناة
 def send_price_update():
-    while True:
-        price = fetch_trump_price()
-        bot.send_message(CHANNEL_ID, price)
-        time.sleep(60)  # تحديث كل دقيقة
+    price = get_price()
+    if price:
+        message = f'{price}$'
+        bot.send_message(CHANNEL_ID, message)
+    else:
+        print("Price is None, skipping the update")
 
-if __name__ == "__main__":
+while True:
     send_price_update()
+    time.sleep(60)  # Update every minute
