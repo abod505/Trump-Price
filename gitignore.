@@ -1,0 +1,11 @@
+# Python bytecode files
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.env/
+
+# Other files to ignore
+*.log
+*.sqlite3
